@@ -95,9 +95,7 @@ defmodule Indexer.Fetcher.InternalTransaction do
     unique_numbers = Enum.uniq(block_numbers)
 
     unique_numbers_count = Enum.count(unique_numbers)
-    Logger.metadata(count: unique_numbers_count)
 
-    Logger.debug("fetching internal transactions for blocks")
 
     json_rpc_named_arguments
     |> Keyword.fetch!(:variant)
@@ -139,15 +137,7 @@ defmodule Indexer.Fetcher.InternalTransaction do
 
     case imports do
       {:error, step, reason, _changes_so_far} ->
-        Logger.error(
-          fn ->
-            [
-              "failed to import first trace for tx: ",
-              inspect(reason)
-            ]
-          end,
-          step: step
-        )
+        
     end
   end
 
@@ -218,16 +208,7 @@ defmodule Indexer.Fetcher.InternalTransaction do
         })
 
       {:error, step, reason, _changes_so_far} ->
-        Logger.error(
-          fn ->
-            [
-              "failed to import internal transactions for blocks: ",
-              inspect(reason)
-            ]
-          end,
-          step: step,
-          error_count: Enum.count(unique_numbers)
-        )
+        
 
         # re-queue the de-duped entries
         {:retry, unique_numbers}
